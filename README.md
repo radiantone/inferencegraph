@@ -124,7 +124,7 @@ const graph = new Graph([
             operator: '='
         }],
         do:[(function() {
-            console.log("DO: fact1 is value!")
+            console.log("DO: fact1 is value1!")
         })],
         retract:[],
         fire:[],
