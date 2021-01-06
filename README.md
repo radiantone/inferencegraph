@@ -171,4 +171,14 @@ const newFact = new Fact(new Factoid({
 }))
 
 brain.assertFact(newFact);
+
+var plan = [];
+
+brain.assertFact(newFact, plan);
+
+console.log("PLAN:",plan);
+
+plan.forEach( func => {
+    func();  // Execute plan functions
+})
 ```
