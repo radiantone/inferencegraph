@@ -184,7 +184,8 @@ export class KnowledgeBase extends Object {
 }
 
 export class Rule extends Object {
-    // Rule is a container for conditions, assertions and other operations on a knowledge base
+    // Rule is a container for conditions, assertions and functions associated with facts
+    // that are evaluated by the inference engine
 
     private _rule: Object;
     public resolved: boolean;
