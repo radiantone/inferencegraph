@@ -32,6 +32,7 @@ $ npm run test
 - Powerful rules with conditions (when), assertions, retractions and functional side-effects (do's)
 - Automatic planning. Functional attributes of rules are built into a functional "plan" during inference chaining. Once the engine has completed its inferences, an executable (and ordered) plan is returned that executes asynchronously returning Promises.
 - Ability to solve inferencing logic problems. A more detailed logic problem example will be forthcoming.
+- Low memory consumption, simple data structures
 
 # Classes
 
@@ -94,7 +95,6 @@ Rule is a container for conditions, assertions and functions associated with fac
 KnowledgeBase is a container for a collection of facts and operations on them
 
 ```
-
 const facts = [
     new Factoid({
         'name': 'fact1',

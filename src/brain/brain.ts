@@ -238,7 +238,7 @@ export class KnowledgeGraph extends Object {
 
     private readonly _kb: KnowledgeBase;
     private graphs: Graph[] = [];
-    private rules: {} = {};
+    private rules = new Map();
 
     constructor(kb) {
         super();
@@ -252,11 +252,11 @@ export class KnowledgeGraph extends Object {
         console.log("Graph: ",graph.graph);
         graph.graph.forEach(rule => {
             rule.when.forEach(when => {
-                if(!this.rules[when['name']]) {
-                    this.rules[when['name']] = [];
+                if(!this.rules.get(when['name'])) {
+                    this.rules.set(when['name'],[])
                 }
                 console.log("KnowledgeGraph: Adding rule: ",JSON.stringify(rule, undefined, 2));
-                this.rules[when['name']].push(rule)
+                this.rules.get(when['name']).push(rule)
             })
         })
         console.log("KnowledegeGraph: Adding graph ", graph);
@@ -267,9 +267,10 @@ export class KnowledgeGraph extends Object {
         console.log(JSON.stringify(fact))
 
         // Get all the rules linked to this fact name
-        if(this.rules[fact.name] && !this.rules[fact.name].resolved) {
+        if(this.rules.get(fact.name) && !this.rules.get(fact.name).resolved) {
 
-            var rules = this.rules[fact.name];
+            //var rules = this.rules[fact.name];
+            var rules = this.rules.get(fact.name);
 
             // Resolve each rule, which triggers other rules
             rules.forEach(rule => {
