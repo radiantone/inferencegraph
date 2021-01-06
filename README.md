@@ -28,6 +28,8 @@ $ npm run test
 
 # Factoids
 
+An untyped data container
+
 ```
 new Factoid({
         'name': 'fact1',
@@ -37,6 +39,8 @@ new Factoid({
 
 # Facts
 
+A typed data container used with Knowledge Bases
+
 ```
 const newFact = new Fact(new Factoid({
     'name':'fact1',
@@ -45,6 +49,8 @@ const newFact = new Fact(new Factoid({
 ```
 
 # Rules
+
+Rule is a container for conditions, assertions and functions associated with facts that are evaluated by the inference engine. Each rule evaluates to either true or false based on it's when conditions, which all must be true for the rule to fire.
 
 ```
  new Rule({
@@ -76,6 +82,8 @@ const newFact = new Fact(new Factoid({
 
 # KnowledgeBase
 
+KnowledgeBase is a container for a collection of facts and operations on them
+
 ```
 
 const facts = [
@@ -97,7 +105,9 @@ const kb = new KnowledgeBase()
 kb.assertFacts(facts, true);
 ```
 
-# KnowledgeGraph
+# Graph
+
+Graph is a container for rules
 
 ```
 const graph = new Graph([
@@ -132,12 +142,20 @@ const graph = new Graph([
         }]
     })
 ]);
+```
 
+# KnowledgeGraph
+
+KnowledgeGraph is a container for graphs
+
+```
 const kg = new KnowledgeGraph(kb)
 kg.addGraph(graph)
 ```
 
 # Brain
+
+Brain is a container for knowledge graphs and high-level API over them
 
 ```
 const brain = new Brain(kg, true);
