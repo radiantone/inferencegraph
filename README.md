@@ -2,6 +2,10 @@
 
 A knowledge graph based forward chain inferencing engine in typescript/node.
 
+## Notes
+
+This is 'in development' and is only a working draft at the moment, not a complete system. Updates will come regularly.
+
 ## Build
 
 $ npm run build
