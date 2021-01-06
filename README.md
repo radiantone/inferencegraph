@@ -2,6 +2,8 @@
 
 A knowledge graph based forward chain inferencing engine in typescript/node.
 
+# Overview
+
 ## Notes
 
 This is 'in development' and is only a working draft at the moment, not a complete system. Updates will come regularly.
@@ -26,7 +28,9 @@ $ npm run test
 - Powerful rules with conditions (when), assertions, retractions and functional side-effects (do's)
 - Automatic planning. Functional attributes of rules are built into a functional "plan" during inference chaining. Once the engine has compelted its inferences, an executable (and ordered) plan is returned that executes asynchronously returning Promises.
 
-# Factoids
+# Classes
+
+## Factoids
 
 An untyped data container
 
@@ -37,7 +41,7 @@ new Factoid({
     })
 ```
 
-# Facts
+## Facts
 
 A typed data container used with Knowledge Bases
 
@@ -48,7 +52,7 @@ const newFact = new Fact(new Factoid({
 }))
 ```
 
-# Rules
+## Rules
 
 Rule is a container for conditions, assertions and functions associated with facts that are evaluated by the inference engine. Each rule evaluates to either true or false based on it's when conditions, which all must be true for the rule to fire.
 
@@ -80,7 +84,7 @@ Rule is a container for conditions, assertions and functions associated with fac
 
 ```
 
-# KnowledgeBase
+## KnowledgeBase
 
 KnowledgeBase is a container for a collection of facts and operations on them
 
@@ -105,7 +109,7 @@ const kb = new KnowledgeBase()
 kb.assertFacts(facts, true);
 ```
 
-# Graph
+## Graph
 
 Graph is a container for rules
 
@@ -144,7 +148,7 @@ const graph = new Graph([
 ]);
 ```
 
-# KnowledgeGraph
+## KnowledgeGraph
 
 KnowledgeGraph is a container for graphs
 
@@ -153,7 +157,7 @@ const kg = new KnowledgeGraph(kb)
 kg.addGraph(graph)
 ```
 
-# Brain
+## Brain
 
 Brain is a container for knowledge graphs and high-level API over them
 
