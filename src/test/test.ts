@@ -107,6 +107,6 @@ brain.assertFact(newFact, plan);
 console.log("PLAN:",plan);
 
 plan.forEach( func => {
-    func();
+    func();  // Execute plan functions
 })
 kb.printFacts()
