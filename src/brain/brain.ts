@@ -28,6 +28,7 @@ export class When extends Object {
 }
 
 export class Fact extends Object {
+    // Fact is a container for a name and a value
 
     private _name: string;
     private _objectValue: object;
@@ -38,6 +39,9 @@ export class Fact extends Object {
     constructor(factoid: Factoid) {
         super();
         this._name = factoid.name;
+
+        // Determine type and set appropriate variable
+
         this._stringValue = factoid.value;
     }
 
@@ -47,6 +51,11 @@ export class Fact extends Object {
 
     set name(value: string) {
         this._name = value;
+    }
+
+    get value(): any {
+        // Based on type, return appropriate variable
+        return null;
     }
 
     get objectValue(): object {
@@ -84,6 +93,7 @@ export class Fact extends Object {
 }
 
 export class KnowledgeBase extends Object {
+    // KnowledgeBase is a container for a collection of facts and operations on them
 
     private _facts = {};
 
@@ -141,6 +151,7 @@ export class KnowledgeBase extends Object {
 }
 
 export class Rule extends Object {
+    // Rule is a container for conditions, assertions and other operations on a knowledge base
 
     private _rule: Object;
     public resolved: boolean;
@@ -168,6 +179,7 @@ export class Rule extends Object {
 }
 
 export class Graph extends Object {
+    // Graph is a container for rules
 
     private readonly _graph: Rule[];
 
@@ -184,6 +196,7 @@ export class Graph extends Object {
 }
 
 export class KnowledgeGraph extends Object {
+    // KnowledgeGraph is a container for graphs
 
     private readonly _kb: KnowledgeBase;
     private graphs: Graph[] = [];
@@ -277,6 +290,7 @@ export class KnowledgeGraph extends Object {
 }
 
 export class Brain {
+    // Brain is a container for knowledge graphs and high-level API over them
 
     private _kg;
     private _suppress = false;
@@ -286,6 +300,10 @@ export class Brain {
         console.log("Brain: Adding KnowledgeGraph: ", kg);
         this._suppress = suppress;
         this._kg = kg
+    }
+
+    addKnowledgeGraph(graph: KnowledgeGraph) {
+        this._kg.addGraph(graph)
     }
 
     resolveFact(fact: Fact) {
@@ -300,7 +318,7 @@ export class Brain {
 
     }
 
-    get kg() {
+    get knowledgeGraph() {
         return this._kg;
     }
 
