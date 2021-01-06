@@ -26,7 +26,7 @@ $ npm run test
 - Extensible
 - Uses Classes. Typescript
 - Powerful rules with conditions (when), assertions, retractions and functional side-effects (do's)
-- Automatic planning. Functional attributes of rules are built into a functional "plan" during inference chaining. Once the engine has compelted its inferences, an executable (and ordered) plan is returned that executes asynchronously returning Promises.
+- Automatic planning. Functional attributes of rules are built into a functional "plan" during inference chaining. Once the engine has completed its inferences, an executable (and ordered) plan is returned that executes asynchronously returning Promises.
 
 # Classes
 
