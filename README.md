@@ -27,6 +27,7 @@ $ npm run test
 - Uses Classes. Typescript
 - Powerful rules with conditions (when), assertions, retractions and functional side-effects (do's)
 - Automatic planning. Functional attributes of rules are built into a functional "plan" during inference chaining. Once the engine has completed its inferences, an executable (and ordered) plan is returned that executes asynchronously returning Promises.
+- Ability to solve inferencing logic problems. A more detailed logic problem example will be forthcoming.
 
 # Classes
 
