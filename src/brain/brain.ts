@@ -1,7 +1,7 @@
 export class Factoid extends Object {
 
   public name: string = '';
-  public value: string = '';
+  public value: any;
 
    constructor(fact: Factoid) {
         super();
@@ -35,14 +35,30 @@ export class Fact extends Object {
     private _stringValue: string;
     private _numberValue: number;
     private _booleanValue: boolean;
+    private _type: string;
 
     constructor(factoid: Factoid) {
         super();
         this._name = factoid.name;
 
         // Determine type and set appropriate variable
+        this._type = typeof(factoid.value)
 
-        this._stringValue = factoid.value;
+        switch(this._type) {
+            case 'string':
+                this._stringValue = factoid.value;
+                break;
+            case 'number':
+                this._numberValue = factoid.value;
+                break;
+            case 'boolean':
+                this._booleanValue = factoid.value;
+                break;
+            case 'object':
+                this._objectValue = factoid.value;
+                break;
+        }
+        
     }
 
     get name(): string {
@@ -55,7 +71,16 @@ export class Fact extends Object {
 
     get value(): any {
         // Based on type, return appropriate variable
-        return null;
+        switch(this._type) {
+            case 'string':
+                return this._stringValue
+            case 'number':
+                return this._numberValue
+            case 'boolean':
+                return this._booleanValue
+            case 'object':
+                return this._objectValue
+        }
     }
 
     get objectValue(): object {
@@ -123,15 +148,23 @@ export class KnowledgeBase extends Object {
     factIsTrue(when: When) {
         const operator = when.operator
         console.log('_facts',JSON.stringify(this._facts))
-        console.log(when.name,this._facts[when.name].stringValue)
-        console.log(this._facts[when.name].stringValue === when.value)
+        console.log(when.name,this._facts[when.name].value)
+        console.log(this._facts[when.name].value === when.value)
         if(!this._facts[when.name]) return false;
 
         // Determine operator and apply correct condition logic here
         if (operator === '=')
-            return this._facts[when.name].stringValue === when.value
+            return this._facts[when.name].value === when.value
         if (operator === '!=')
-            return this._facts[when.name].stringValue != when.value
+            return this._facts[when.name].value != when.value
+        if (operator === '>')
+            return this._facts[when.name].value > when.value
+        if (operator === '<')
+            return this._facts[when.name].value < when.value
+        if (operator === 'true')
+            return this._facts[when.name].value
+        if (operator === 'false')
+            return !this._facts[when.name].value
     }
 
     printFacts() {

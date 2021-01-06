@@ -43,7 +43,7 @@ const graph = new Graph([
         do:[],
         assert: [{
             name:'fact3',
-            value: 'stop'
+            value: 5
         }]
     })
 ]);
@@ -59,8 +59,8 @@ const graph2 = new Graph([
         },
             {
             name:'fact3',
-            value: 'stop',
-            operator: '='
+            value: 6,
+            operator: '<'
         }],
         retract:[],
         fire:[],
