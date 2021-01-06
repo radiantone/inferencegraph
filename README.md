@@ -176,6 +176,7 @@ const newFact = new Fact(new Factoid({
 
 var plan = [];
 
+// Infer a plan stemming from this fact assertion
 brain.assertFact(newFact, plan);
 
 console.log("PLAN:",plan);
