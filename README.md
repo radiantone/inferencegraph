@@ -10,7 +10,7 @@ This is 'in development' and is only a working draft at the moment, not a comple
 
 $ npm run build
 
-# Run
+## Run
 
 $ npm run test
 
