@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "A knowledge graph based forward chain inferencing engine in typescript/node.",
   "scripts": {
-    "test": "ts-node src/test/brain3.ts",
+    "test": "ts-node src/test/test.ts",
     "build": "tsc --build",
     "clean": "tsc --build --clean"
   },
