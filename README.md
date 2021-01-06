@@ -174,8 +174,6 @@ const newFact = new Fact(new Factoid({
     'value':'value1'
 }))
 
-brain.assertFact(newFact);
-
 var plan = [];
 
 brain.assertFact(newFact, plan);
