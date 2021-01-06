@@ -210,6 +210,10 @@ export class Rule extends Object {
     get assert(): string {
         return this._rule['assert']
     }
+
+    get dos(): object[] {
+        return this._rule['do']
+    }
 }
 
 export class Graph extends Object {
@@ -259,7 +263,7 @@ export class KnowledgeGraph extends Object {
     }
 
     // suppress - future use
-    resolveFact(fact: Fact, suppress: boolean) {
+    resolveFact(fact: Fact, suppress: boolean, plan: object[]) {
         console.log(JSON.stringify(fact))
 
         // Get all the rules linked to this fact name
@@ -285,11 +289,14 @@ export class KnowledgeGraph extends Object {
                 // themselves will be resolved 
                 if(whenTrue && rule.assert) {
                     rule.resolved = true
+                    rule.dos.forEach(func => {
+                        plan.push(func)
+                    })
                     rule.assert.forEach(assertion => {
                         const fact = new Fact(assertion);
                         try {
                             console.log("Firing rule: ",JSON.stringify(rule, undefined, 2));
-                            this.assertFact(fact,suppress);
+                            this.assertFact(fact,suppress, plan);
                         } catch (err) {
                             console.log(err);
                         }
@@ -305,10 +312,10 @@ export class KnowledgeGraph extends Object {
     }
 
     // suppress - future use
-    assertFact(fact: Fact, suppress: boolean) {
+    assertFact(fact: Fact, suppress: boolean, plan: object[]) {
         try {
             this._kb.assertFact(fact,suppress);
-            this.resolveFact(fact, suppress)
+            this.resolveFact(fact, suppress, plan)
         } catch (err) {
             console.log("assertFact Error: ",err);
         }
@@ -341,11 +348,11 @@ export class Brain {
     }
 
     resolveFact(fact: Fact) {
-        this._kg.resolveFact(fact);
+        this._kg.resolveFact(fact, true, []);
     }
 
-    assertFact(fact: Fact) {
-        this._kg.assertFact(fact, this._suppress);
+    assertFact(fact: Fact, plan: object[]) {
+        this._kg.assertFact(fact, this._suppress, plan);
     }
 
     retractFact(fact: Fact) {
