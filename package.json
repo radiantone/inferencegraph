@@ -1,23 +1,23 @@
 {
-  "name": "@radiantone/inferencegraph",
-  "version": "0.0.2",
+  "name": "inferencegraph",
+  "version": "0.0.3",
   "description": "A knowledge graph based forward chain inferencing engine in typescript/node.",
   "scripts": {
     "test": "ts-node src/test/test.ts",
     "build": "tsc --build",
-    "clean": "tsc --build --clean"
+    "clean": "rm -rf lib;tsc --build --clean"
   },
+  "types": "lib/brain/brain.d.ts",
+  "main": "lib/brain/brain.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/radiantone/inferencegraph.git"
   },
   "keywords": [
-    "knowledge",
-    "graph",
-    "inference",
-    "engine",
-    "rules",
-    "engine"
+    "knowledge graph",
+    "inference engine",
+    "rules engine",
+    "artificial intelligence"
   ],
   "devDependencies": {
     "@types/node": "^14.14.20",

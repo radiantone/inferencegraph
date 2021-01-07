@@ -291,7 +291,7 @@ export class KnowledgeGraph extends Object {
                 if(whenTrue && rule.assert) {
                     rule.resolved = true
                     rule.dos.forEach(func => {
-                        plan.push(func)
+                        plan.push(new Promise(func))
                     })
                     rule.assert.forEach(assertion => {
                         const fact = new Fact(assertion);
