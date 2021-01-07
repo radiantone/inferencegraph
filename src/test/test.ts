@@ -104,21 +104,21 @@ var plan = [];
 var callbacks = new Callbacks();
 
 callbacks.onFactTrue = (fact, rule, when) => {
-    console.log("callback: onFactTrue: ",fact,rule,when)
+    console.log("callback: onFactTrue: ", fact, rule, when)
 }
 callbacks.onFactFalse = (fact, rule, when) => {
-    console.log("callback: onFactFalse: ",fact,rule,when)
+    console.log("callback: onFactFalse: ", fact, rule, when)
 }
 callbacks.onFactResolved = (fact) => {
-    console.log("callback: onFactResolved! ",fact)
+    console.log("callback: onFactResolved! ", fact)
 }
-brain.assertFact(newFact, plan,callbacks);
+brain.assertFact(newFact, plan, callbacks);
 
 console.log("PLAN:",plan);
 
 plan.forEach( promise => {
     promise.then( (result) => {
-        console.log("CALLBACK:",result)
+        console.log("CALLBACK:", result)
     });  // Execute plan functions
 })
 kb.printFacts()
