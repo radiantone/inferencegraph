@@ -1,5 +1,5 @@
 {
-  "name": "@radiantone/inferencegraph",
+  "name": "inferencegraph",
   "version": "0.0.2",
   "description": "A knowledge graph based forward chain inferencing engine in typescript/node.",
   "scripts": {
@@ -12,12 +12,10 @@
     "url": "git+https://github.com/radiantone/inferencegraph.git"
   },
   "keywords": [
-    "knowledge",
-    "graph",
-    "inference",
-    "engine",
-    "rules",
-    "engine"
+    "knowledge graph",
+    "inference engine",
+    "rules engine",
+    "artificial intelligence"
   ],
   "devDependencies": {
     "@types/node": "^14.14.20",
