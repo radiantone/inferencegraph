@@ -6,17 +6,27 @@ A knowledge graph based forward chain inferencing engine in typescript/node.
 
 ## Notes
 
-This is 'in development' and is only a working draft at the moment, not a complete system. Updates will come regularly.
+This is 'in development' and is only a working draft at the moment, not a complete system. Updates will come regularly. I have some interesting plans for this package.
 
 ## Install
 
+\# From this cloned repo <br>
 $ npm i
+
+\# From your node project <br>
+$ npm i inferencegraph
 
 ## Build
 
-$ npm run build
+\# Within this cloned repo <br>
+
+$ npm run build <br>
+\# Clean build & test<br>
+$ npm run clean && npm run build && npm run test
 
 ## Run
+
+\# Within this cloned repo <br>
 
 $ npm run test
 
@@ -33,6 +43,14 @@ $ npm run test
 - Automatic planning. Functional attributes of rules are built into a functional "plan" during inference chaining. Once the engine has completed its inferences, an executable (and ordered) plan is returned that executes asynchronously returning Promises.
 - Ability to solve inferencing logic problems. A more detailed logic problem example will be forthcoming.
 - Low memory consumption, simple data structures
+
+# Importing
+
+From within your typescript module
+
+```
+import { Graph, Fact, Factoid, KnowledgeBase, KnowledgeGraph, Brain, Rule } from 'inferencegraph'
+```
 
 # Classes
 

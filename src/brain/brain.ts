@@ -11,11 +11,20 @@ export class Factoid extends Object {
 
 }
 
+export class Callbacks extends Object {
+
+    public onFactTrue: Function;
+    public onFactFalse: Function;
+    public onFactAsserted: Function;
+    public onFactResolved: Function;
+    public onResolveFact: Function;
+
+}
 
 export class When extends Object {
 
   public name: string = '';
-  public value: string = '';
+  public value: any;
   public operator: string = '';
 
    constructor(when: When) {
@@ -120,7 +129,7 @@ export class Fact extends Object {
 export class KnowledgeBase extends Object {
     // KnowledgeBase is a container for a collection of facts and operations on them
 
-    private _facts = {};
+    private _facts = new Map();
 
     constructor() {
         super();
@@ -137,42 +146,40 @@ export class KnowledgeBase extends Object {
 
     // suppress - future use
     assertFact(fact: Fact, suppress: boolean) {
-        //if (this._facts[fact.name] && this._facts[fact.name].objectValue === fact.objectValue) {
-           // return; //return peacefully
-            //throw new Error("Fact value is the same.");
-        //}
         console.log("KnowledgeBase: Asserting fact: ", JSON.stringify(fact,undefined,2));
-        this._facts[fact.name] = fact;
+        this._facts.set(fact.name, fact);
     }
 
     factIsTrue(when: When) {
         const operator = when.operator
-        console.log('_facts',JSON.stringify(this._facts))
-        console.log(when.name,this._facts[when.name].value)
-        console.log(this._facts[when.name].value === when.value)
-        if(!this._facts[when.name]) return false;
+        console.log('factIsTrue: _facts',JSON.stringify(this._facts))
+        if(!this._facts.get(when.name)) return false;
 
         // Determine operator and apply correct condition logic here
         if (operator === '=')
-            return this._facts[when.name].value === when.value
+            return this._facts.get(when.name).value === when.value
         if (operator === '!=')
-            return this._facts[when.name].value != when.value
+            return this._facts.get(when.name).value != when.value
         if (operator === '>')
-            return this._facts[when.name].value > when.value
+            return this._facts.get(when.name).value > when.value
         if (operator === '<')
-            return this._facts[when.name].value < when.value
+            return this._facts.get(when.name).value < when.value
         if (operator === 'true')
-            return this._facts[when.name].value
+            return this._facts.get(when.name).value
         if (operator === 'false')
-            return !this._facts[when.name].value
+            return !this._facts.get(when.name).value
     }
 
     printFacts() {
-        console.log(JSON.stringify(this._facts, undefined, 2))
+        let jsonObject = {};  
+        this._facts.forEach((value, key) => {  
+            jsonObject[key] = value  
+        });  
+        console.log(JSON.stringify(jsonObject, undefined, 2))
     }
 
     removeFact(fact: Fact) {
-        delete this._facts[fact.name];
+        this._facts.delete(fact.name);
         console.log("Removed fact: ", fact);
         console.log("Remaining facts: ", this._facts);
     }
@@ -263,7 +270,7 @@ export class KnowledgeGraph extends Object {
     }
 
     // suppress - future use
-    resolveFact(fact: Fact, suppress: boolean, plan: object[]) {
+    resolveFact(fact: Fact, suppress: boolean, plan: object[], callbacks: Callbacks) {
         console.log(JSON.stringify(fact))
 
         // Get all the rules linked to this fact name
@@ -282,8 +289,19 @@ export class KnowledgeGraph extends Object {
                 // All when conditions must be true for this rule to fire
                 rule['when'].forEach(when => {
                     if (!this._kb.factIsTrue(when)) whenTrue = false;
+                    if(callbacks && callbacks['onFactTrue'] && whenTrue) {
+                        new Promise((resolve, reject) => {
+                            resolve(callbacks.onFactTrue(rule, when));
+                        })
+                    } else {
+                        if(callbacks && callbacks['onFactFalse'] && !whenTrue) {
+                            new Promise((resolve, reject) => {
+                                resolve(callbacks.onFactFalse(rule, when));
+                            })
+                        }
+                    }
                 });
-
+                
                 console.log("WHEN CONDITION IS: ",whenTrue)
 
                 // If when conditions are true, then assert all the facts, which
@@ -291,19 +309,24 @@ export class KnowledgeGraph extends Object {
                 if(whenTrue && rule.assert) {
                     rule.resolved = true
                     rule.dos.forEach(func => {
-                        plan.push(new Promise(func))
+                        plan.push(new Promise((resolve, reject) => {
+                            resolve(func(callbacks))
+                        }))
                     })
                     rule.assert.forEach(assertion => {
                         const fact = new Fact(assertion);
                         try {
                             console.log("Firing rule: ",JSON.stringify(rule, undefined, 2));
-                            this.assertFact(fact,suppress, plan);
+                            this.assertFact(fact,suppress, plan, callbacks);
                         } catch (err) {
                             console.log(err);
                         }
                     })
                    
                 }
+            })
+            new Promise((resolve, reject) => {
+                resolve(callbacks.onFactResolved(fact));
             })
         }
     }
@@ -313,10 +336,10 @@ export class KnowledgeGraph extends Object {
     }
 
     // suppress - future use
-    assertFact(fact: Fact, suppress: boolean, plan: object[]) {
+    assertFact(fact: Fact, suppress: boolean, plan: object[], callbacks: Callbacks) {
         try {
             this._kb.assertFact(fact,suppress);
-            this.resolveFact(fact, suppress, plan)
+            this.resolveFact(fact, suppress, plan, callbacks)
         } catch (err) {
             console.log("assertFact Error: ",err);
         }
@@ -352,8 +375,8 @@ export class Brain {
         this._kg.resolveFact(fact, true, []);
     }
 
-    assertFact(fact: Fact, plan: object[]) {
-        this._kg.assertFact(fact, this._suppress, plan);
+    assertFact(fact: Fact, plan: object[], callbacks: object) {
+        this._kg.assertFact(fact, this._suppress, plan, callbacks);
     }
 
     retractFact(fact: Fact) {

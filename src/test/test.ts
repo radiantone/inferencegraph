@@ -1,4 +1,4 @@
-import { Graph, Fact, Factoid, KnowledgeBase, KnowledgeGraph, Brain, Rule } from '../brain/brain'
+import { Graph, Fact, Factoid, Callbacks, KnowledgeBase, KnowledgeGraph, Brain, Rule } from '../brain/brain'
 
 const facts = [
     new Factoid({
@@ -23,17 +23,10 @@ const graph = new Graph([
             value: 'value1',
             operator: '='
         }],
-        do:[(function(success) {
-             success("DO: fact1 is value!");
+        do:[(function(callbacks) {
+             return "DO: fact1 is value! "+JSON.stringify(callbacks)
         })],
         retract:['fact1'],
-        fire:{
-            onFactAsserted: true,
-            onFactResolved: true,
-            onFactTrue: true,
-            onFactFalse: false,
-            onCompleted: true
-        },
         assert: [{
             name:'fact2',
             value: 'Finished!'
@@ -48,8 +41,8 @@ const graph = new Graph([
         }],
         retract:[],
         fire:[],
-        do:[(function(success) {
-            success("DO: fact2 is Finished!");
+        do:[(function(callbacks) { // Can receive callbacks object here, which might have other user data
+            return "DO: fact2 is Finished! "+JSON.stringify(callbacks)
         })],
         assert: [{
             name:'fact3',
@@ -104,11 +97,21 @@ const newFact = new Fact(new Factoid({
     'value':'value1'
 }))
 
-console.log("FACTS:",JSON.stringify(brain.knowledgeGraph.kb.facts, undefined, 2));
+kb.printFacts()
 
 var plan = [];
 
-brain.assertFact(newFact, plan);
+var callbacks = new Callbacks();
+callbacks.onFactTrue = (rule, when) => {
+    console.log("callback: onFactTrue: ",rule,when)
+}
+callbacks.onFactFalse = (rule, when) => {
+    console.log("callback: onFactFalse: ",rule,when)
+}
+callbacks.onFactResolved = (fact) => {
+    console.log("callback: onFactResolved! ",fact)
+}
+brain.assertFact(newFact, plan,callbacks);
 
 console.log("PLAN:",plan);
 
