@@ -1,5 +1,5 @@
 {
-  "name": "inferencegraph",
+  "name": "@radiantone/inferencegraph",
   "version": "0.0.1",
   "description": "A knowledge graph based forward chain inferencing engine in typescript/node.",
   "scripts": {
@@ -32,7 +32,6 @@
   },
   "homepage": "https://github.com/radiantone/inferencegraph#readme",
   "dependencies": {
-    "i": "^0.3.6",
-    "redis": "^3.0.2"
+    "i": "^0.3.6"
   }
 }
