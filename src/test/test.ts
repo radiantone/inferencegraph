@@ -104,7 +104,7 @@ const newFact = new Fact(new Factoid({
     'value':'value1'
 }))
 
-console.log("FACTS:",JSON.stringify(brain.knowledgeGraph.kb.facts, undefined, 2));
+kb.printFacts()
 
 var plan = [];
 
