@@ -184,6 +184,40 @@ const kg = new KnowledgeGraph(kb)
 kg.addGraph(graph)
 ```
 
+## Callbacks
+
+Callbacks are optional, but will be invoked during inferencing to trigger your business logic if using Plans is not the desired course.<br>
+
+Events
+
+```
+export class Callbacks extends Object {
+
+    public onFactTrue: Function;
+    public onFactFalse: Function;
+    public onFactAsserted: Function;
+    public onFactResolved: Function;
+    public onResolveFact: Function;
+
+}
+```
+
+Usage
+
+```
+var callbacks = new Callbacks();
+
+callbacks.onFactTrue = (fact, rule, when) => {
+    console.log("callback: onFactTrue: ",rule,when)
+}
+callbacks.onFactFalse = (fact, rule, when) => {
+    console.log("callback: onFactFalse: ",rule,when)
+}
+callbacks.onFactResolved = (fact,rule, when) => {
+    console.log("callback: onFactResolved! ",fact)
+}
+```
+
 ## Brain
 
 Brain is a container for knowledge graphs and high-level API over them
@@ -199,7 +233,7 @@ const newFact = new Fact(new Factoid({
 var plan = [];
 
 // Infer a plan stemming from this fact assertion
-brain.assertFact(newFact, plan);
+brain.assertFact(newFact, plan, callbacks);
 
 console.log("PLAN:",plan);
 

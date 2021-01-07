@@ -291,12 +291,12 @@ export class KnowledgeGraph extends Object {
                     if (!this._kb.factIsTrue(when)) whenTrue = false;
                     if(callbacks && callbacks['onFactTrue'] && whenTrue) {
                         new Promise((resolve, reject) => {
-                            resolve(callbacks.onFactTrue(rule, when));
+                            resolve(callbacks.onFactTrue(fact, rule, when));
                         })
                     } else {
                         if(callbacks && callbacks['onFactFalse'] && !whenTrue) {
                             new Promise((resolve, reject) => {
-                                resolve(callbacks.onFactFalse(rule, when));
+                                resolve(callbacks.onFactFalse(fact, rule, when));
                             })
                         }
                     }
