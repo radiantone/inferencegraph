@@ -26,8 +26,14 @@ const graph = new Graph([
         do:[(function() {
             console.log("DO: fact1 is value!")
         })],
-        retract:[],
-        fire:[],
+        retract:['fact1'],
+        fire:{
+            onFactAsserted: true,
+            onFactResolved: true,
+            onFactTrue: true,
+            onFactFalse: false,
+            onCompleted: true
+        },
         assert: [{
             name:'fact2',
             value: 'Finished!'
