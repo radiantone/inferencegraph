@@ -1,6 +1,6 @@
 {
   "name": "inferencegraph",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A knowledge graph based forward chain inferencing engine in typescript/node.",
   "scripts": {
     "test": "ts-node src/test/test.ts",
