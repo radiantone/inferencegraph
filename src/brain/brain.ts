@@ -11,6 +11,16 @@ export class Factoid extends Object {
 
 }
 
+export class Callbacks extends Object {
+
+    public onFactTrue: Function;
+    public onFactFalse: Function;
+    public onFactAsserted: Function;
+    public onFactResolved: Function;
+    public onResolveFact: Function;
+
+}
+
 export class When extends Object {
 
   public name: string = '';
@@ -260,7 +270,7 @@ export class KnowledgeGraph extends Object {
     }
 
     // suppress - future use
-    resolveFact(fact: Fact, suppress: boolean, plan: object[]) {
+    resolveFact(fact: Fact, suppress: boolean, plan: object[], callbacks: Callbacks) {
         console.log(JSON.stringify(fact))
 
         // Get all the rules linked to this fact name
@@ -279,8 +289,13 @@ export class KnowledgeGraph extends Object {
                 // All when conditions must be true for this rule to fire
                 rule['when'].forEach(when => {
                     if (!this._kb.factIsTrue(when)) whenTrue = false;
+                    if(callbacks && callbacks['onFactTrue'] && whenTrue) {
+                        new Promise((resolve, reject) => {
+                            resolve(callbacks.onFactTrue(rule, when));
+                        })
+                    }
                 });
-
+                
                 console.log("WHEN CONDITION IS: ",whenTrue)
 
                 // If when conditions are true, then assert all the facts, which
@@ -288,19 +303,24 @@ export class KnowledgeGraph extends Object {
                 if(whenTrue && rule.assert) {
                     rule.resolved = true
                     rule.dos.forEach(func => {
-                        plan.push(new Promise(func))
+                        plan.push(new Promise((resolve, reject) => {
+                            resolve(func(callbacks))
+                        }))
                     })
                     rule.assert.forEach(assertion => {
                         const fact = new Fact(assertion);
                         try {
                             console.log("Firing rule: ",JSON.stringify(rule, undefined, 2));
-                            this.assertFact(fact,suppress, plan);
+                            this.assertFact(fact,suppress, plan, callbacks);
                         } catch (err) {
                             console.log(err);
                         }
                     })
                    
                 }
+            })
+            new Promise((resolve, reject) => {
+                resolve(callbacks.onFactResolved(fact));
             })
         }
     }
@@ -310,10 +330,10 @@ export class KnowledgeGraph extends Object {
     }
 
     // suppress - future use
-    assertFact(fact: Fact, suppress: boolean, plan: object[]) {
+    assertFact(fact: Fact, suppress: boolean, plan: object[], callbacks: Callbacks) {
         try {
             this._kb.assertFact(fact,suppress);
-            this.resolveFact(fact, suppress, plan)
+            this.resolveFact(fact, suppress, plan, callbacks)
         } catch (err) {
             console.log("assertFact Error: ",err);
         }
@@ -349,8 +369,8 @@ export class Brain {
         this._kg.resolveFact(fact, true, []);
     }
 
-    assertFact(fact: Fact, plan: object[]) {
-        this._kg.assertFact(fact, this._suppress, plan);
+    assertFact(fact: Fact, plan: object[], callbacks: object) {
+        this._kg.assertFact(fact, this._suppress, plan, callbacks);
     }
 
     retractFact(fact: Fact) {
