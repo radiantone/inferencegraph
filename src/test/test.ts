@@ -23,8 +23,8 @@ const graph = new Graph([
             value: 'value1',
             operator: '='
         }],
-        do:[(function() {
-            console.log("DO: fact1 is value!")
+        do:[(function(success) {
+             success("DO: fact1 is value!");
         })],
         retract:['fact1'],
         fire:{
@@ -48,8 +48,8 @@ const graph = new Graph([
         }],
         retract:[],
         fire:[],
-        do:[(function() {
-            console.log("DO: fact2 is Finished!")
+        do:[(function(success) {
+            success("DO: fact2 is Finished!");
         })],
         assert: [{
             name:'fact3',
@@ -112,7 +112,9 @@ brain.assertFact(newFact, plan);
 
 console.log("PLAN:",plan);
 
-plan.forEach( func => {
-    func();  // Execute plan functions
+plan.forEach( promise => {
+    promise.then( (result) => {
+        console.log("CALLBACK:",result)
+    });  // Execute plan functions
 })
 kb.printFacts()
