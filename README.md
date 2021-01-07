@@ -208,14 +208,15 @@ Usage
 var callbacks = new Callbacks();
 
 callbacks.onFactTrue = (fact, rule, when) => {
-    console.log("callback: onFactTrue: ",rule,when)
+    console.log("callback: onFactTrue: ",fact,rule,when)
 }
 callbacks.onFactFalse = (fact, rule, when) => {
-    console.log("callback: onFactFalse: ",rule,when)
+    console.log("callback: onFactFalse: ",fact,rule,when)
 }
-callbacks.onFactResolved = (fact,rule, when) => {
+callbacks.onFactResolved = (fact) => {
     console.log("callback: onFactResolved! ",fact)
 }
+brain.assertFact(newFact, plan,callbacks);
 ```
 
 ## Brain

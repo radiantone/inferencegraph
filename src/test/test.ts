@@ -102,6 +102,7 @@ kb.printFacts()
 var plan = [];
 
 var callbacks = new Callbacks();
+
 callbacks.onFactTrue = (fact, rule, when) => {
     console.log("callback: onFactTrue: ",fact,rule,when)
 }
