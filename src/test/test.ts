@@ -105,6 +105,9 @@ var callbacks = new Callbacks();
 callbacks.onFactTrue = (rule, when) => {
     console.log("callback: onFactTrue: ",rule,when)
 }
+callbacks.onFactFalse = (rule, when) => {
+    console.log("callback: onFactFalse: ",rule,when)
+}
 callbacks.onFactResolved = (fact) => {
     console.log("callback: onFactResolved! ",fact)
 }
