@@ -102,11 +102,11 @@ kb.printFacts()
 var plan = [];
 
 var callbacks = new Callbacks();
-callbacks.onFactTrue = (rule, when) => {
-    console.log("callback: onFactTrue: ",rule,when)
+callbacks.onFactTrue = (fact, rule, when) => {
+    console.log("callback: onFactTrue: ",fact,rule,when)
 }
-callbacks.onFactFalse = (rule, when) => {
-    console.log("callback: onFactFalse: ",rule,when)
+callbacks.onFactFalse = (fact, rule, when) => {
+    console.log("callback: onFactFalse: ",fact,rule,when)
 }
 callbacks.onFactResolved = (fact) => {
     console.log("callback: onFactResolved! ",fact)
