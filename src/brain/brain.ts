@@ -2,7 +2,7 @@
 export class Factoid extends Object {
 
   public name = '';
-  public value: any;
+  public value;
 
    constructor(fact: Factoid) {
         super();
@@ -25,7 +25,7 @@ export class Callbacks extends Object {
 export class When extends Object {
 
   public name = '';
-  public value: any;
+  public value;
   public operator = '';
 
    constructor(when: When) {
@@ -80,6 +80,7 @@ export class Fact extends Object {
         this._name = value;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     get value(): any {
         // Based on type, return appropriate variable
         switch(this._type) {
@@ -138,21 +139,24 @@ export class KnowledgeBase extends Object {
     }
 
     // suppress - future use
-    assertFacts(facts: Factoid[], suppress: boolean) {
+    assertFacts(facts: Factoid[], suppress: boolean):null {
         console.log("KnowledgeBase: Adding Facts");
         facts.forEach((fact: Factoid) => {
             const _fact = new Fact(fact)
             this.assertFact(_fact,suppress)
         })
+        return
     }
 
     // suppress - future use
-    assertFact(fact: Fact, suppress: boolean) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    assertFact(fact: Fact, suppress: boolean):null {
         console.log("KnowledgeBase: Asserting fact: ", JSON.stringify(fact,undefined,2));
         this._facts.set(fact.name, fact);
+        return
     }
 
-    factIsTrue(when: When) {
+    factIsTrue(when: When):boolean {
         const operator = when.operator
         if(!this._facts.get(when.name)) return false;
 
@@ -169,20 +173,23 @@ export class KnowledgeBase extends Object {
             return this._facts.get(when.name).value
         if (operator === 'false')
             return !this._facts.get(when.name).value
+
     }
 
-    printFacts() {
+    printFacts():null {
         const jsonObject = {};  
         this._facts.forEach((value, key) => {  
             jsonObject[key] = value  
         });  
         console.log(JSON.stringify(jsonObject, undefined, 2))
+        return
     }
 
-    removeFact(fact: Fact) {
+    removeFact(fact: Fact):null {
         this._facts.delete(fact.name);
         console.log("Removed fact: ", fact);
         console.log("Remaining facts: ", this._facts);
+        return
     }
 
     get facts(): {} {
@@ -248,13 +255,13 @@ export class KnowledgeGraph extends Object {
     private graphs: Graph[] = [];
     private rules = new Map();
 
-    constructor(kb) {
+    constructor(kb:KnowledgeBase) {
         super();
         this._kb = kb;
         console.log("KnowledegeGraph: Adding KnowledgeBase");
     }
 
-    addGraph(graph: Graph) {
+    addGraph(graph: Graph):null {
         this.graphs.push(graph);
 
         console.log("Graph: ",graph.graph);
@@ -268,10 +275,11 @@ export class KnowledgeGraph extends Object {
             })
         })
         console.log("KnowledegeGraph: Adding graph ", graph);
+        return
     }
 
     // suppress - future use
-    resolveFact(fact: Fact, suppress: boolean, plan: object[], callbacks: Callbacks) {
+    resolveFact(fact: Fact, suppress: boolean, plan: object[], callbacks: Callbacks):null {
         console.log(JSON.stringify(fact))
 
         // Get all the rules linked to this fact name
@@ -291,12 +299,12 @@ export class KnowledgeGraph extends Object {
                 rule['when'].forEach(when => {
                     if (!this._kb.factIsTrue(when)) whenTrue = false;
                     if(callbacks && callbacks['onFactTrue'] && whenTrue) {
-                        new Promise((resolve, reject) => {
+                        new Promise((resolve) => {
                             resolve(callbacks.onFactTrue(fact, rule, when));
                         })
                     } else {
                         if(callbacks && callbacks['onFactFalse'] && !whenTrue) {
-                            new Promise((resolve, reject) => {
+                            new Promise((resolve) => {
                                 resolve(callbacks.onFactFalse(fact, rule, when));
                             })
                         }
@@ -310,7 +318,7 @@ export class KnowledgeGraph extends Object {
                 if(whenTrue && rule.assert) {
                     rule.resolved = true
                     rule.dos.forEach(func => {
-                        plan.push(new Promise((resolve, reject) => {
+                        plan.push(new Promise((resolve) => {
                             resolve(func(callbacks))
                         }))
                     })
@@ -326,18 +334,15 @@ export class KnowledgeGraph extends Object {
                    
                 }
             })
-            new Promise((resolve, reject) => {
+            new Promise((resolve) => {
                 resolve(callbacks.onFactResolved(fact));
             })
+            return
         }
     }
 
-    mergeFact(fact: Fact) {
-        throw Error('Not Implemented')
-    }
-
     // suppress - future use
-    assertFacts(facts: Fact[], suppress: boolean, plan: object[], callbacks: Callbacks) {
+    assertFacts(facts: Fact[], suppress: boolean, plan: object[], callbacks: Callbacks):null {
         try {
             facts.forEach( fact => {
                 this._kb.assertFact(fact,suppress);
@@ -346,20 +351,18 @@ export class KnowledgeGraph extends Object {
         } catch (err) {
             console.log("assertFact Error: ",err);
         }
+        return
     }
 
     // suppress - future use
-    assertFact(fact: Fact, suppress: boolean, plan: object[], callbacks: Callbacks) {
+    assertFact(fact: Fact, suppress: boolean, plan: object[], callbacks: Callbacks):null {
         try {
             this._kb.assertFact(fact,suppress);
             this.resolveFact(fact, suppress, plan, callbacks)
         } catch (err) {
             console.log("assertFact Error: ",err);
         }
-    }
-
-    retractFact(fact: Fact) {
-        throw Error('Not Implemented')
+        return
     }
 
     get kb(): KnowledgeBase {
@@ -380,27 +383,23 @@ export class Brain {
         this._kg = kg
     }
 
-    addKnowledgeGraph(graph: KnowledgeGraph) {
-        this._kg.addGraph(graph)
+    addKnowledgeGraph(graph: KnowledgeGraph):null {
+        return this._kg.addGraph(graph)
     }
 
-    resolveFact(fact: Fact) {
-        this._kg.resolveFact(fact, true, []);
+    resolveFact(fact: Fact):null {
+        return this._kg.resolveFact(fact, true, []);
     }
 
-    assertFacts(facts: Fact[], plan: object[], callbacks: object) {
-        this._kg.assertFacts(facts, this._suppress, plan, callbacks);
+    assertFacts(facts: Fact[], plan: object[], callbacks: object):null {
+        return this._kg.assertFacts(facts, this._suppress, plan, callbacks);
     }
 
-    assertFact(fact: Fact, plan: object[], callbacks: object) {
-        this._kg.assertFact(fact, this._suppress, plan, callbacks);
+    assertFact(fact: Fact, plan: object[], callbacks: object):null {
+        return this._kg.assertFact(fact, this._suppress, plan, callbacks);
     }
 
-    retractFact(fact: Fact) {
-        throw Error('Not Implemented')
-    }
-
-    get knowledgeGraph() {
+    get knowledgeGraph():KnowledgeGraph {
         return this._kg;
     }
 

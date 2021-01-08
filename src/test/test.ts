@@ -1,4 +1,3 @@
-import { publicEncrypt } from 'crypto';
 import { Graph, Fact, Factoid, Callbacks, KnowledgeBase, KnowledgeGraph, Brain, Rule } from '../brain/brain'
 
 const graph = new Graph([
@@ -14,9 +13,8 @@ const graph = new Graph([
             operator: '='
         }],
         retract:[],
-        fire:[],
-        do:[(function(callbacks) { // Can receive callbacks object here, which might have other user data
-            return "DO: It's a dog!"+JSON.stringify(callbacks)
+        do:[(function() { // Can receive callbacks object here, which might have other user data
+            return "DO: It's a dog!"
         })],
         assert: [{
             name:'specie',
@@ -35,9 +33,8 @@ const graph = new Graph([
             operator: '='
         }],
         retract:[],
-        fire:[],
-        do:[(function(callbacks) { // Can receive callbacks object here, which might have other user data
-            return "DO: It's a dalmation!"+JSON.stringify(callbacks)
+        do:[(function() { // Can receive callbacks object here, which might have other user data
+            return "DO: It's a dalmation!"
         })],
         assert: [{
             name:'breed',
@@ -63,9 +60,8 @@ const graph2 = new Graph([
             operator: '='
         }],
         retract:[],
-        fire:[],
-        do:[(function(callbacks) { // Can receive callbacks object here, which might have other user data
-            return "DO: It's a korgi!"+JSON.stringify(callbacks)
+        do:[(function() { // Can receive callbacks object here, which might have other user data
+            return "DO: It's a korgi!"
         })],
         assert: [{
             name:'breed',
