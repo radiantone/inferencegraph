@@ -81,7 +81,7 @@ console.log("Facts")
 console.log("--------------")
 kb.printFacts()
 // Holds the knowledge
-const brain = new Brain(kg, true);
+const brain = new Brain(kg);
 
 kb.printFacts()
 
