@@ -28,7 +28,7 @@ $ npm run lint <br>
 
 $ npm run build <br>
 \# Clean build & test<br>
-$ npm run clean && npm run build && npm run test
+$ npm run clean && npm run build && npm run lint && npm run test
 
 ## Run
 
@@ -100,7 +100,6 @@ Rule is a container for conditions, assertions and functions associated with fac
             operator: '='
         }],
         retract:[],
-        fire:[],
         do:[(function(callbacks) {
             return "DO: It's a dog!"+JSON.stringify(callbacks)
         })],
@@ -153,7 +152,6 @@ const graph = new Graph([
             operator: '='
         }],
         retract:[],
-        fire:[],
         do:[(function(callbacks) { // Can receive callbacks object here, which might have other user data
             return "DO: It's a dog!"+JSON.stringify(callbacks)
         })],
@@ -174,7 +172,6 @@ const graph = new Graph([
             operator: '='
         }],
         retract:[],
-        fire:[],
         do:[(function(callbacks) { // Can receive callbacks object here, which might have other user data
             return "DO: It's a dalmation!"+JSON.stringify(callbacks)
         })],
@@ -208,7 +205,6 @@ export class Callbacks extends Object {
     public onFactFalse: Function;
     public onFactAsserted: Function;
     public onFactResolved: Function;
-    public onResolveFact: Function;
 
 }
 ```
