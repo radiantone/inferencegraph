@@ -138,19 +138,17 @@ export class KnowledgeBase extends Object {
         super();
     }
 
-    // suppress - future use
-    assertFacts(facts: Factoid[], suppress: boolean):null {
+    assertFacts(facts: Factoid[]):null {
         console.log("KnowledgeBase: Adding Facts");
         facts.forEach((fact: Factoid) => {
             const _fact = new Fact(fact)
-            this.assertFact(_fact,suppress)
+            this.assertFact(_fact)
         })
         return
     }
 
-    // suppress - future use
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    assertFact(fact: Fact, suppress: boolean):null {
+    assertFact(fact: Fact):null {
         console.log("KnowledgeBase: Asserting fact: ", JSON.stringify(fact,undefined,2));
         this._facts.set(fact.name, fact);
         return
@@ -278,8 +276,7 @@ export class KnowledgeGraph extends Object {
         return
     }
 
-    // suppress - future use
-    resolveFact(fact: Fact, suppress: boolean, plan: object[], callbacks: Callbacks):null {
+    resolveFact(fact: Fact, plan: object[], callbacks: Callbacks):null {
         console.log(JSON.stringify(fact))
 
         // Get all the rules linked to this fact name
@@ -326,7 +323,7 @@ export class KnowledgeGraph extends Object {
                         const fact = new Fact(assertion);
                         try {
                             console.log("Firing rule: ",JSON.stringify(rule, undefined, 2));
-                            this.assertFact(fact,suppress, plan, callbacks);
+                            this.assertFact(fact, plan, callbacks);
                         } catch (err) {
                             console.log(err);
                         }
@@ -341,12 +338,10 @@ export class KnowledgeGraph extends Object {
         }
     }
 
-    // suppress - future use
-    assertFacts(facts: Fact[], suppress: boolean, plan: object[], callbacks: Callbacks):null {
+    assertFacts(facts: Fact[], plan: object[], callbacks: Callbacks):null {
         try {
             facts.forEach( fact => {
-                this._kb.assertFact(fact,suppress);
-                this.resolveFact(fact, suppress, plan, callbacks)
+                this.assertFact(fact, plan, callbacks)
             })
         } catch (err) {
             console.log("assertFact Error: ",err);
@@ -354,11 +349,10 @@ export class KnowledgeGraph extends Object {
         return
     }
 
-    // suppress - future use
-    assertFact(fact: Fact, suppress: boolean, plan: object[], callbacks: Callbacks):null {
+    assertFact(fact: Fact, plan: object[], callbacks: Callbacks):null {
         try {
-            this._kb.assertFact(fact,suppress);
-            this.resolveFact(fact, suppress, plan, callbacks)
+            this._kb.assertFact(fact);
+            this.resolveFact(fact, plan, callbacks)
         } catch (err) {
             console.log("assertFact Error: ",err);
         }
@@ -374,12 +368,9 @@ export class Brain {
     // Brain is a container for knowledge graphs and high-level API over them
 
     private _kg;
-    private _suppress = false;
 
-    // suppress - future use
-    constructor(kg: KnowledgeGraph, suppress: boolean) {
+    constructor(kg: KnowledgeGraph) {
         console.log("Brain: Adding KnowledgeGraph: ", kg);
-        this._suppress = suppress;
         this._kg = kg
     }
 
@@ -392,11 +383,11 @@ export class Brain {
     }
 
     assertFacts(facts: Fact[], plan: object[], callbacks: object):null {
-        return this._kg.assertFacts(facts, this._suppress, plan, callbacks);
+        return this._kg.assertFacts(facts, plan, callbacks);
     }
 
     assertFact(fact: Fact, plan: object[], callbacks: object):null {
-        return this._kg.assertFact(fact, this._suppress, plan, callbacks);
+        return this._kg.assertFact(fact, plan, callbacks);
     }
 
     get knowledgeGraph():KnowledgeGraph {

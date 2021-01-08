@@ -45,7 +45,7 @@ const graph = new Graph([
 
 const graph2 = new Graph([
     new Rule({
-        name: "korgi",
+        name: "corgi",
         when: [{
             name:'specie',
             value: 'dog',
@@ -61,11 +61,11 @@ const graph2 = new Graph([
         }],
         retract:[],
         do:[(function() { // Can receive callbacks object here, which might have other user data
-            return "DO: It's a korgi!"
+            return "DO: It's a corgi!"
         })],
         assert: [{
             name:'breed',
-            value: 'korgi'
+            value: 'corgi'
         }]
     })
 ]);
@@ -81,7 +81,7 @@ console.log("Facts")
 console.log("--------------")
 kb.printFacts()
 // Holds the knowledge
-const brain = new Brain(kg, true);
+const brain = new Brain(kg);
 
 kb.printFacts()
 
@@ -122,7 +122,7 @@ plan.forEach( promise => {
 
 kb.printFacts()
 
-const korgiFacts = [ new Fact(new Factoid({
+const corgiFacts = [ new Fact(new Factoid({
     'name':'hair',
     'value':true
 })), new Fact(new Factoid({
@@ -138,7 +138,7 @@ const korgiFacts = [ new Fact(new Factoid({
 
 plan = []
 
-brain.assertFacts(korgiFacts, plan, callbacks);
+brain.assertFacts(corgiFacts, plan, callbacks);
 
 plan.forEach( promise => {
     promise.then( (result) => {

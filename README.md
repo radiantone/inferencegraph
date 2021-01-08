@@ -16,13 +16,19 @@ $ npm i
 \# From your node project <br>
 $ npm i inferencegraph
 
+## Lint
+
+\# Within this cloned repo <br>
+
+$ npm run lint <br>
+
 ## Build
 
 \# Within this cloned repo <br>
 
 $ npm run build <br>
 \# Clean build & test<br>
-$ npm run clean && npm run build && npm run test
+$ npm run clean && npm run build && npm run lint && npm run test
 
 ## Run
 
@@ -94,7 +100,6 @@ Rule is a container for conditions, assertions and functions associated with fac
             operator: '='
         }],
         retract:[],
-        fire:[],
         do:[(function(callbacks) {
             return "DO: It's a dog!"+JSON.stringify(callbacks)
         })],
@@ -111,7 +116,7 @@ Rule is a container for conditions, assertions and functions associated with fac
 KnowledgeBase is a container for a collection of facts and operations on them
 
 ```
-const korgiFacts = [ new Fact(new Factoid({
+const corgiFacts = [ new Fact(new Factoid({
     'name':'hair',
     'value':true
 })), new Fact(new Factoid({
@@ -126,7 +131,7 @@ const korgiFacts = [ new Fact(new Factoid({
 }))]
 
 const kb = new KnowledgeBase()
-kb.assertFacts(korgiFacts, true);
+kb.assertFacts(corgiFacts, true);
 ```
 
 ## Graph
@@ -147,7 +152,6 @@ const graph = new Graph([
             operator: '='
         }],
         retract:[],
-        fire:[],
         do:[(function(callbacks) { // Can receive callbacks object here, which might have other user data
             return "DO: It's a dog!"+JSON.stringify(callbacks)
         })],
@@ -168,7 +172,6 @@ const graph = new Graph([
             operator: '='
         }],
         retract:[],
-        fire:[],
         do:[(function(callbacks) { // Can receive callbacks object here, which might have other user data
             return "DO: It's a dalmation!"+JSON.stringify(callbacks)
         })],
@@ -202,7 +205,6 @@ export class Callbacks extends Object {
     public onFactFalse: Function;
     public onFactAsserted: Function;
     public onFactResolved: Function;
-    public onResolveFact: Function;
 
 }
 ```
