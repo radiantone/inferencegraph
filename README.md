@@ -61,8 +61,8 @@ An untyped data container
 
 ```
 new Factoid({
-        'name': 'fact1',
-        'value': 'value0'
+        'name': 'barks',
+        'value': true
     })
 ```
 
@@ -72,8 +72,8 @@ A typed data container used with Knowledge Bases
 
 ```
 const newFact = new Fact(new Factoid({
-    'name':'fact1',
-    'value':'value1'
+    'name':'barks',
+    'value':true
 }))
 ```
 
@@ -82,28 +82,25 @@ const newFact = new Fact(new Factoid({
 Rule is a container for conditions, assertions and functions associated with facts that are evaluated by the inference engine. Each rule evaluates to either true or false based on it's when conditions, which all must be true for the rule to fire.
 
 ```
- new Rule({
-        name: "rule2",
-        when: [
-            {
-            name:'factB',
-            value: 'valueB',
+    new Rule({
+        name: "dog",
+        when: [{
+            name:'hair',
+            value: true,
             operator: '='
-        },
-            {
-            name:'fact3',
-            value: 6,
-            operator: '<'
+        },{
+            name:'barks',
+            value: true,
+            operator: '='
         }],
         retract:[],
         fire:[],
-        do:[],
+        do:[(function(callbacks) {
+            return "DO: It's a dog!"+JSON.stringify(callbacks)
+        })],
         assert: [{
-            name:'fact4',
-            value: "I'm done!"
-        },{
-            name:'fact1',
-            value: "value1"
+            name:'specie',
+            value: 'dog'
         }]
     })
 
@@ -114,23 +111,22 @@ Rule is a container for conditions, assertions and functions associated with fac
 KnowledgeBase is a container for a collection of facts and operations on them
 
 ```
-const facts = [
-    new Factoid({
-        'name': 'fact1',
-        'value': 'value0'
-    }),
-    new Factoid({
-        'name': 'fact2',
-        'value': 'value2'
-    }),
-    new Factoid({
-        'name': 'factB',
-        'value': 'valueB'
-    })
-]
+const korgiFacts = [ new Fact(new Factoid({
+    'name':'hair',
+    'value':true
+})), new Fact(new Factoid({
+    'name':'barks',
+    'value':true
+})), new Fact(new Factoid({
+    'name':'fur',
+    'value':'tan'
+})), new Fact(new Factoid({
+    'name':'legs',
+    'value':'short'
+}))]
 
 const kb = new KnowledgeBase()
-kb.assertFacts(facts, true);
+kb.assertFacts(korgiFacts, true);
 ```
 
 ## Graph
@@ -140,37 +136,45 @@ Graph is a container for rules
 ```
 const graph = new Graph([
     new Rule({
-        name: "rule1",
+        name: "dog",
         when: [{
-            name: 'fact1',
-            value: 'value1',
+            name:'hair',
+            value: true,
+            operator: '='
+        },{
+            name:'barks',
+            value: true,
             operator: '='
         }],
-        do:[(function() {
-            console.log("DO: fact1 is value1!")
-        })],
         retract:[],
         fire:[],
+        do:[(function(callbacks) { // Can receive callbacks object here, which might have other user data
+            return "DO: It's a dog!"+JSON.stringify(callbacks)
+        })],
         assert: [{
-            name:'fact2',
-            value: 'Finished!'
+            name:'specie',
+            value: 'dog'
         }]
     }),
     new Rule({
-        name: "rule2",
+        name: "dalmation",
         when: [{
-            name:'fact2',
-            value: 'Finished!',
+            name:'specie',
+            value: 'dog',
+            operator: '='
+        },{
+            name:'fur',
+            value: 'spotted',
             operator: '='
         }],
         retract:[],
         fire:[],
-        do:[(function() {
-            console.log("DO: fact2 is Finished!")
+        do:[(function(callbacks) { // Can receive callbacks object here, which might have other user data
+            return "DO: It's a dalmation!"+JSON.stringify(callbacks)
         })],
         assert: [{
-            name:'fact3',
-            value: 5
+            name:'breed',
+            value: 'dalmation'
         }]
     })
 ]);
@@ -228,8 +232,8 @@ Brain is a container for knowledge graphs and high-level API over them
 const brain = new Brain(kg, true);
 
 const newFact = new Fact(new Factoid({
-    'name':'fact1',
-    'value':'value1'
+    'name':'fur',
+    'value':'spotted'
 }))
 
 var plan = [];
@@ -239,7 +243,9 @@ brain.assertFact(newFact, plan, callbacks);
 
 console.log("PLAN:",plan);
 
-plan.forEach( func => {
-    func();  // Execute plan functions
+plan.forEach( promise => {
+    promise.then( (result) => {
+        console.log("CALLBACK:", result)
+    });  // Execute plan functions
 })
 ```
