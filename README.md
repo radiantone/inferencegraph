@@ -43,6 +43,7 @@ $ npm run test
 - Automatic planning. Functional attributes of rules are built into a functional "plan" during inference chaining. Once the engine has completed its inferences, an executable (and ordered) plan is returned that executes asynchronously returning Promises.
 - Ability to solve inferencing logic problems. A more detailed logic problem example will be forthcoming.
 - Low memory consumption, simple data structures
+- Work in Node and in Browser
 
 # Importing
 
@@ -208,14 +209,15 @@ Usage
 var callbacks = new Callbacks();
 
 callbacks.onFactTrue = (fact, rule, when) => {
-    console.log("callback: onFactTrue: ",rule,when)
+    console.log("callback: onFactTrue: ",fact,rule,when)
 }
 callbacks.onFactFalse = (fact, rule, when) => {
-    console.log("callback: onFactFalse: ",rule,when)
+    console.log("callback: onFactFalse: ",fact,rule,when)
 }
-callbacks.onFactResolved = (fact,rule, when) => {
+callbacks.onFactResolved = (fact) => {
     console.log("callback: onFactResolved! ",fact)
 }
+brain.assertFact(newFact, plan,callbacks);
 ```
 
 ## Brain

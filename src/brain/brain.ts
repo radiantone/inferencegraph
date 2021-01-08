@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-types */
 export class Factoid extends Object {
 
-  public name: string = '';
+  public name = '';
   public value: any;
 
    constructor(fact: Factoid) {
@@ -23,9 +24,9 @@ export class Callbacks extends Object {
 
 export class When extends Object {
 
-  public name: string = '';
+  public name = '';
   public value: any;
-  public operator: string = '';
+  public operator = '';
 
    constructor(when: When) {
         super();
@@ -52,6 +53,7 @@ export class Fact extends Object {
 
         // Determine type and set appropriate variable
         this._type = typeof(factoid.value)
+        console.log('_type:',this._type,' for ',factoid.value)
 
         switch(this._type) {
             case 'string':
@@ -152,7 +154,6 @@ export class KnowledgeBase extends Object {
 
     factIsTrue(when: When) {
         const operator = when.operator
-        console.log('factIsTrue: _facts',JSON.stringify(this._facts))
         if(!this._facts.get(when.name)) return false;
 
         // Determine operator and apply correct condition logic here
@@ -171,7 +172,7 @@ export class KnowledgeBase extends Object {
     }
 
     printFacts() {
-        let jsonObject = {};  
+        const jsonObject = {};  
         this._facts.forEach((value, key) => {  
             jsonObject[key] = value  
         });  
@@ -277,14 +278,14 @@ export class KnowledgeGraph extends Object {
         if(this.rules.get(fact.name) && !this.rules.get(fact.name).resolved) {
 
             //var rules = this.rules[fact.name];
-            var rules = this.rules.get(fact.name);
+            const rules = this.rules.get(fact.name);
 
             // Resolve each rule, which triggers other rules
             rules.forEach(rule => {
                 if (rule.resolved) return;
                 console.log(fact['name']+":Rule:"+JSON.stringify(rule, undefined, 2));
 
-                var whenTrue = true;
+                let whenTrue = true;
 
                 // All when conditions must be true for this rule to fire
                 rule['when'].forEach(when => {
@@ -332,7 +333,19 @@ export class KnowledgeGraph extends Object {
     }
 
     mergeFact(fact: Fact) {
+        throw Error('Not Implemented')
+    }
 
+    // suppress - future use
+    assertFacts(facts: Fact[], suppress: boolean, plan: object[], callbacks: Callbacks) {
+        try {
+            facts.forEach( fact => {
+                this._kb.assertFact(fact,suppress);
+                this.resolveFact(fact, suppress, plan, callbacks)
+            })
+        } catch (err) {
+            console.log("assertFact Error: ",err);
+        }
     }
 
     // suppress - future use
@@ -346,7 +359,7 @@ export class KnowledgeGraph extends Object {
     }
 
     retractFact(fact: Fact) {
-
+        throw Error('Not Implemented')
     }
 
     get kb(): KnowledgeBase {
@@ -375,12 +388,16 @@ export class Brain {
         this._kg.resolveFact(fact, true, []);
     }
 
+    assertFacts(facts: Fact[], plan: object[], callbacks: object) {
+        this._kg.assertFacts(facts, this._suppress, plan, callbacks);
+    }
+
     assertFact(fact: Fact, plan: object[], callbacks: object) {
         this._kg.assertFact(fact, this._suppress, plan, callbacks);
     }
 
     retractFact(fact: Fact) {
-
+        throw Error('Not Implemented')
     }
 
     get knowledgeGraph() {
