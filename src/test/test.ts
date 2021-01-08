@@ -1,86 +1,81 @@
+import { publicEncrypt } from 'crypto';
 import { Graph, Fact, Factoid, Callbacks, KnowledgeBase, KnowledgeGraph, Brain, Rule } from '../brain/brain'
-
-const facts = [
-    new Factoid({
-        'name': 'fact1',
-        'value': 'value0'
-    }),
-    new Factoid({
-        'name': 'fact2',
-        'value': 'value2'
-    }),
-    new Factoid({
-        'name': 'factB',
-        'value': 'valueB'
-    })
-]
 
 const graph = new Graph([
     new Rule({
-        name: "rule1",
+        name: "dog",
         when: [{
-            name: 'fact1',
-            value: 'value1',
+            name:'hair',
+            value: true,
             operator: '='
-        }],
-        do:[(function(callbacks) {
-             return "DO: fact1 is value! "+JSON.stringify(callbacks)
-        })],
-        retract:['fact1'],
-        assert: [{
-            name:'fact2',
-            value: 'Finished!'
-        }]
-    }),
-    new Rule({
-        name: "rule2",
-        when: [{
-            name:'fact2',
-            value: 'Finished!',
+        },{
+            name:'barks',
+            value: true,
             operator: '='
         }],
         retract:[],
         fire:[],
         do:[(function(callbacks) { // Can receive callbacks object here, which might have other user data
-            return "DO: fact2 is Finished! "+JSON.stringify(callbacks)
+            return "DO: It's a dog!"+JSON.stringify(callbacks)
         })],
         assert: [{
-            name:'fact3',
-            value: 5
+            name:'specie',
+            value: 'dog'
+        }]
+    }),
+    new Rule({
+        name: "dalmation",
+        when: [{
+            name:'specie',
+            value: 'dog',
+            operator: '='
+        },{
+            name:'fur',
+            value: 'spotted',
+            operator: '='
+        }],
+        retract:[],
+        fire:[],
+        do:[(function(callbacks) { // Can receive callbacks object here, which might have other user data
+            return "DO: It's a dalmation!"+JSON.stringify(callbacks)
+        })],
+        assert: [{
+            name:'breed',
+            value: 'dalmation'
         }]
     })
 ]);
 
 const graph2 = new Graph([
     new Rule({
-        name: "rule2",
-        when: [
-            {
-            name:'factB',
-            value: 'valueB',
+        name: "korgi",
+        when: [{
+            name:'specie',
+            value: 'dog',
             operator: '='
-        },
-            {
-            name:'fact3',
-            value: 6,
-            operator: '<'
+        },{
+            name:'legs',
+            value: 'short',
+            operator: '='
+        },{
+            name:'fur',
+            value: 'tan',
+            operator: '='
         }],
         retract:[],
         fire:[],
-        do:[],
+        do:[(function(callbacks) { // Can receive callbacks object here, which might have other user data
+            return "DO: It's a korgi!"+JSON.stringify(callbacks)
+        })],
         assert: [{
-            name:'fact4',
-            value: "I'm done!"
-        },{
-            name:'fact1',
-            value: "value1"
+            name:'breed',
+            value: 'korgi'
         }]
     })
 ]);
 
 // Holds the facts
 const kb = new KnowledgeBase()
-kb.assertFacts(facts, true);
 
 // Holds the rules & the facts
 const kg = new KnowledgeGraph(kb)
@@ -92,16 +87,11 @@ kb.printFacts()
 // Holds the knowledge
 const brain = new Brain(kg, true);
 
-const newFact = new Fact(new Factoid({
-    'name':'fact1',
-    'value':'value1'
-}))
-
 kb.printFacts()
 
-var plan = [];
+let plan = [];
 
-var callbacks = new Callbacks();
+const callbacks = new Callbacks();
 
 callbacks.onFactTrue = (fact, rule, when) => {
     console.log("callback: onFactTrue: ", fact, rule, when)
@@ -112,7 +102,19 @@ callbacks.onFactFalse = (fact, rule, when) => {
 callbacks.onFactResolved = (fact) => {
     console.log("callback: onFactResolved! ", fact)
 }
-brain.assertFact(newFact, plan, callbacks);
+
+const dogFacts = [ new Fact(new Factoid({
+    'name':'hair',
+    'value':true
+})), new Fact(new Factoid({
+    'name':'barks',
+    'value':true
+})), new Fact(new Factoid({
+    'name':'fur',
+    'value':'spotted'
+}))]
+
+brain.assertFacts(dogFacts, plan, callbacks);
 
 console.log("PLAN:",plan);
 
@@ -121,4 +123,31 @@ plan.forEach( promise => {
         console.log("CALLBACK:", result)
     });  // Execute plan functions
 })
+
+kb.printFacts()
+
+const korgiFacts = [ new Fact(new Factoid({
+    'name':'hair',
+    'value':true
+})), new Fact(new Factoid({
+    'name':'barks',
+    'value':true
+})), new Fact(new Factoid({
+    'name':'fur',
+    'value':'tan'
+})), new Fact(new Factoid({
+    'name':'legs',
+    'value':'short'
+}))]
+
+plan = []
+
+brain.assertFacts(korgiFacts, plan, callbacks);
+
+plan.forEach( promise => {
+    promise.then( (result) => {
+        console.log("CALLBACK:", result)
+    });  // Execute plan functions
+})
+
 kb.printFacts()
