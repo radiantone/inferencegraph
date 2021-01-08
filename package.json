@@ -5,7 +5,8 @@
   "scripts": {
     "test": "ts-node src/test/test.ts",
     "build": "tsc --build",
-    "clean": "rm -rf lib;tsc --build --clean"
+    "clean": "rm -rf lib;tsc --build --clean",
+    "lint": "eslint . --ext .ts"
   },
   "types": "lib/brain/brain.d.ts",
   "main": "lib/brain/brain.js",
@@ -21,6 +22,8 @@
   ],
   "devDependencies": {
     "@types/node": "^14.14.20",
+    "@typescript-eslint/eslint-plugin": "^4.12.0",
+    "@typescript-eslint/parser": "^4.12.0",
     "commonjs": "0.0.1",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7"
@@ -32,6 +35,7 @@
   },
   "homepage": "https://github.com/radiantone/inferencegraph#readme",
   "dependencies": {
+    "eslint": "^7.17.0",
     "i": "^0.3.6"
   }
 }
