@@ -205,6 +205,7 @@ export class Callbacks extends Object {
     public onFactFalse: Function;
     public onFactAsserted: Function;
     public onFactResolved: Function;
+    public onFactRetracted: Function;
 
 }
 ```
