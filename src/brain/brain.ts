@@ -19,7 +19,8 @@ export class Callbacks extends Object {
     public onFactAsserted: Function;
     public onFactResolved: Function;
     public onResolveFact: Function;
-
+    public onFactRetracted: Function;
+    
 }
 
 export class When extends Object {
