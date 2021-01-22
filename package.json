@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "description": "A knowledge graph based forward chain inferencing engine in typescript/node.",
   "scripts": {
-    "test": "ts-node src/test/test.ts",
-    "build": "tsc --build",
     "clean": "rm -rf lib;tsc --build --clean",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "build": "tsc --build",
+    "test": "ts-node src/test/test.ts",
+    "all": "npm run clean && npm run build && npm run lint && npm run test",
+    "publish": "npm publish --access public"
   },
   "types": "lib/brain/brain.d.ts",
   "main": "lib/brain/brain.js",
