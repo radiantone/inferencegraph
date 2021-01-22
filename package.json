@@ -1,6 +1,6 @@
 {
   "name": "inferencegraph",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A knowledge graph based forward chain inferencing engine in typescript/node.",
   "scripts": {
     "clean": "rm -rf lib;tsc --build --clean",
