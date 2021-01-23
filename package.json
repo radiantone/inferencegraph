@@ -1,6 +1,6 @@
 {
   "name": "inferencegraph",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A knowledge graph based forward chain inferencing engine in typescript/node.",
   "scripts": {
     "clean": "rm -rf lib;tsc --build --clean",
@@ -8,7 +8,7 @@
     "build": "tsc --build",
     "test": "ts-node src/test/test.ts",
     "all": "npm run clean && npm run build && npm run lint && npm run test",
-    "publish": "npm publish --access public"
+    "pub": "npm publish --access public"
   },
   "types": "lib/brain/brain.d.ts",
   "main": "lib/brain/brain.js",
